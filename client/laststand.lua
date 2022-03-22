@@ -1,6 +1,6 @@
 Laststand = Laststand or {}
 Laststand.ReviveInterval = 360
-Laststand.MinimumRevive = 300
+Laststand.MinimumRevive = 360
 InLaststand = false
 LaststandTime = 0
 lastStandDict = "combat@damage@writhe"
@@ -81,6 +81,7 @@ function SetLaststand(bool, spawn)
         InLaststand = true
 
         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
+        TriggerEvent('un-dispatch:emsnotify')
 
         CreateThread(function()
             while InLaststand do
