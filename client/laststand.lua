@@ -81,7 +81,6 @@ function SetLaststand(bool, spawn)
         InLaststand = true
 
         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
-        TriggerEvent('un-dispatch:emsnotify')
 
         CreateThread(function()
             while InLaststand do
