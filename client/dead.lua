@@ -133,6 +133,17 @@ end)
 
 emsNotified = false
 
+
+ RegisterCommand('alert_dead', function()
+        if isDead or InLaststand and not emsNotified then
+            TriggerEvent('un-dispatch:emsnotify')
+            emsNotified = true
+        end
+     end)
+
+ RegisterKeyMapping('alert_dead', 'Request help from Police/EMS', 'keyboard', 'G')
+
+
 CreateThread(function()
 	while true do
         sleep = 1000
@@ -195,7 +206,6 @@ CreateThread(function()
 
                     if IsControlJustPressed(0, 47) and not emsNotified then
                         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
-                        TriggerEvent('un-dispatch:emsnotify')
                         emsNotified = true
                     end
                 end
