@@ -135,7 +135,7 @@ emsNotified = false
 
 
  RegisterCommand('alert_dead', function()
-        if isDead or InLaststand and not emsNotified then
+        if  InLaststand and not emsNotified then
             TriggerEvent('un-dispatch:emsnotify')
             emsNotified = true
         end
