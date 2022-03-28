@@ -664,6 +664,21 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     end)
 end)
 
+RegisterNetEvent('hospital:client:closestbed', function()
+    if LocalPlayer.state['isLoggedIn'] then
+        local pos = GetEntityCoords(PlayerPedId())
+        if closestBed and not isInHospitalBed then
+            -- if #(pos - vector3(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z)) < 2 then
+                if GetAvailableBed(closestBed) then
+                    TriggerServerEvent("hospital:server:SendToBedA", closestBed, false)
+                else
+                    QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+                end
+            -- end
+        end
+    end
+end)
+
 RegisterNetEvent('hospital:client:SetBed', function(id, isTaken)
     Config.Locations["beds"][id].taken = isTaken
 end)
@@ -880,19 +895,19 @@ CreateThread(function()
                 end
             end
 
-            if closestBed and not isInHospitalBed then
-                if #(pos - vector3(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z)) < 2 then
-                    sleep = 5
-                    DrawText3D(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z + 0.3, Lang:t('text.lie_bed'))
-                    if IsControlJustReleased(0, 38) then
-                        if GetAvailableBed(closestBed) then
-                            TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
-                        else
-                            QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
-                        end
-                    end
-                end
-            end
+            -- if closestBed and not isInHospitalBed then
+            --     if #(pos - vector3(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z)) < 2 then
+            --         sleep = 5
+            --         DrawText3D(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z + 0.3, Lang:t('text.lie_bed'))
+            --         if IsControlJustReleased(0, 38) then
+            --             if GetAvailableBed(closestBed) then
+            --                 TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
+            --             else
+            --                 QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+            --             end
+            --         end
+            --     end
+            -- end
         end
         Wait(sleep)
     end

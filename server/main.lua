@@ -23,6 +23,11 @@ RegisterNetEvent('hospital:server:SendToBed', function(bedId, isRevive)
 	TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
 	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
 end)
+RegisterNetEvent('hospital:server:SendToBedA', function(bedId, isRevive)
+	local src = source
+	TriggerClientEvent('hospital:client:SendToBed', src, bedId, Config.Locations["beds"][bedId], isRevive)
+	TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
+end)
 
 RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 	local src = source
@@ -333,6 +338,21 @@ QBCore.Commands.Add('aheal', Lang:t('info.heal_player_a'), {{name = 'id', help =
 		TriggerClientEvent('hospital:client:adminHeal', src)
 	end
 end, 'admin')
+
+QBCore.Commands.Add('bed', 'Get On Bed', {}, false, function(source, closestBed)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if Player ~= isInHospitalBed then
+		print('testing client')
+		TriggerClientEvent('hospital:client:closestbed', source, closestBed)
+		print(closestBed)
+        -- TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+		-- TriggerClientEvent('hospital:client:SendToBed', source, bedId, Config.Locations["beds"][bedId])
+		-- TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
+        else
+			print('fail utk cari bed')
+            -- QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+        end
+end)
 
 -- Items
 
