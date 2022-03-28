@@ -84,7 +84,7 @@ Config.Items = {
     items = {
         [1] = {
             name = "radio",
-            price = 0,
+            price = 100,
             amount = 50,
             info = {},
             type = "item",
@@ -92,7 +92,7 @@ Config.Items = {
         },
         [2] = {
             name = "bandage",
-            price = 0,
+            price = 100,
             amount = 50,
             info = {},
             type = "item",
@@ -100,7 +100,7 @@ Config.Items = {
         },
         [3] = {
             name = "painkillers",
-            price = 0,
+            price = 100,
             amount = 50,
             info = {},
             type = "item",
@@ -108,7 +108,7 @@ Config.Items = {
         },
         [4] = {
             name = "firstaid",
-            price = 0,
+            price = 500,
             amount = 50,
             info = {},
             type = "item",
@@ -116,7 +116,7 @@ Config.Items = {
         },
         [5] = {
             name = "weapon_flashlight",
-            price = 0,
+            price = 100,
             amount = 50,
             info = {},
             type = "item",
@@ -124,7 +124,7 @@ Config.Items = {
         },
         [6] = {
             name = "weapon_fireextinguisher",
-            price = 0,
+            price = 100,
             amount = 50,
             info = {},
             type = "item",
