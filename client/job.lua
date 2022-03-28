@@ -305,6 +305,8 @@ CreateThread(function()
     end
 end)
 
+--On Duty qb-target
+
 Citizen.CreateThread(function()
     exports['qb-target']:AddBoxZone("AmbulanceDuty", vector3(307.28, -597.22, 43.28), 0.5, 0.3, {
         name="AmbulanceDuty",
@@ -460,7 +462,7 @@ CreateThread(function()
                 local dist = #(pos - v)
                 if dist < 1.5 then
                     sleep = 5
-                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_roof'))
+                    DrawText3D(v.x, v.y, v.z, '~g~E~w~ - Lift ke Garage')
                     if IsControlJustReleased(0, 38) then
                         DoScreenFadeOut(500)
                         while not IsScreenFadedOut() do
@@ -484,7 +486,7 @@ CreateThread(function()
                 local dist = #(pos - vector3(v.x, v.y, v.z))
                 if dist < 1.5 then
                     sleep = 5
-                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_main'))
+                    DrawText3D(v.x, v.y, v.z, '~g~E~w~ - Lift ke Main Lobby')
                     if IsControlJustReleased(0, 38) then
                         DoScreenFadeOut(500)
                         while not IsScreenFadedOut() do
