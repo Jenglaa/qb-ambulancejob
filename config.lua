@@ -1,7 +1,7 @@
 Config = {}
 
 Config.MinimalDoctors = 1
-Config.WipeInventoryOnRespawn = true
+Config.WipeInventoryOnRespawn = false
 
 Config.Locations = {
     ["checking"] = {
@@ -24,28 +24,35 @@ Config.Locations = {
         [1] = vector3(310.22, -563.64, 43.28),
         [2] = vector3(-245.13, 6315.71, 32.82), --paleto
     },
+    ["main"] = {
+        [1] = vector3(327.14, -603.79, 43.28),
+    },
     ["roof"] = {
         [1] = vector4(338.5, -583.85, 74.16, 245.5),
     },
-    ["main"] = {
-        [1] = vector3(327.14, -603.79, 43.28),
+    ["main-2"] = {
+        [1] = vector3(332.31, -595.59, 43.28),
+    },
+    ["garage"] = {
+        [1] = vector4(344.31, -586.32, 28.8, 249.42),
     },
     ["stash"] = {
         [1] = vector3(306.42, -601.8, 43.28),
     },
     ["beds"] = {
-        [1] = {coords = vector4(307.79, -581.79, 43, 333), taken = false, model = 1631638868},
-        [2] = {coords = vector4(311.0, -583, 43, 333), taken = false, model = 1631638868},
-        [3] = {coords = vector4(314.4, -584.33, 43, 333), taken = false, model = 1631638868},
-        [4] = {coords = vector4(317.52, -585.56, 43, 333), taken = false, model = 1631638868},
-        [5] = {coords = vector4(322.68, -587.19, 43, 333), taken = false, model = 1631638868},
-        [6] = {coords = vector4(309.25, -577.42, 43, 154), taken = false, model = -1631638868},
-        [7] = {coords = vector4(313.76, -579.02, 43, 154), taken = false, model = -1631638868},
-        [8] = {coords = vector4(319.31, -581.04, 43, 154), taken = false, model = -1631638868},
+        [1] = {coords = vector4(307.79, -581.79, 42.307793, 333), taken = false, model = 1631638868},
+        [2] = {coords = vector4(311.0, -583, 42.307793, 333), taken = false, model = 1631638868},
+        [3] = {coords = vector4(314.4, -584.33, 42.307793, 333), taken = false, model = 1631638868},
+        [4] = {coords = vector4(317.52, -585.56, 42.307793, 333), taken = false, model = 1631638868},
+        [5] = {coords = vector4(322.68, -587.19, 42.307793, 333), taken = false, model = 1631638868},
+        [6] = {coords = vector4(309.25, -577.42, 42.307793, 154), taken = false, model = -1631638868},
+        [7] = {coords = vector4(313.76, -579.02, 42.307793, 154), taken = false, model = -1631638868},
+        [8] = {coords = vector4(319.31, -581.04, 42.307793, 154), taken = false, model = -1631638868},
 	--- paleto
 	    [9] = {coords = vector4(-252.43, 6312.25, 32.34, 313.48), taken = false, model = 2117668672},
         [10] = {coords = vector4(-247.04, 6317.95, 32.34, 134.64), taken = false, model = 2117668672},
         [11] = {coords = vector4(-255.98, 6315.67, 32.34, 313.91), taken = false, model = 2117668672},
+        [12] = {coords = vector4(315.47, -566.57, 42.307793, 154), taken = false, model = -1519439119},
     },
     ["stations"] = {
         [1] = {label = Lang:t('info.pb_hospital'), coords = vector4(304.27, -600.33, 43.28, 272.249)}
