@@ -52,7 +52,6 @@ Config.Locations = {
 	    [9] = {coords = vector4(-252.43, 6312.25, 32.34, 313.48), taken = false, model = 2117668672},
         [10] = {coords = vector4(-247.04, 6317.95, 32.34, 134.64), taken = false, model = 2117668672},
         [11] = {coords = vector4(-255.98, 6315.67, 32.34, 313.91), taken = false, model = 2117668672},
-        [12] = {coords = vector4(315.47, -566.57, 42.307793, 154), taken = false, model = -1519439119},
     },
     ["stations"] = {
         [1] = {label = Lang:t('info.pb_hospital'), coords = vector4(304.27, -600.33, 43.28, 272.249)}
