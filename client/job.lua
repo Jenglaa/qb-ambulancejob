@@ -143,6 +143,12 @@ RegisterNetEvent('QBCore:Client:SetDuty', function(duty)
     TriggerServerEvent("hospital:server:SetDoctor")
 end)
 
+RegisterNetEvent('qb-ambulancejob:ToggleDuty', function()
+    onDuty = not onDuty
+    TriggerServerEvent("police:server:UpdateBlips")
+    TriggerServerEvent("QBCore:ToggleDuty")
+end)
+
 RegisterNetEvent('hospital:client:CheckStatus', function()
     local player, distance = GetClosestPlayer()
     if player ~= -1 and distance < 5.0 then
@@ -299,6 +305,26 @@ CreateThread(function()
     end
 end)
 
+Citizen.CreateThread(function()
+    exports['qb-target']:AddBoxZone("AmbulanceDuty", vector3(307.28, -597.22, 43.28), 0.5, 0.3, {
+        name="AmbulanceDuty",
+        heading=250,
+        debugPoly=true,
+        minZ=43.5,
+        maxZ=44.08
+    }, {
+        options = {
+            {  
+            event = "qb-ambulancejob:ToggleDuty",
+            icon = "far fa-clipboard",
+            label = "Duty On/Off",
+            job = "ambulance",
+            },
+        },
+        distance = 1.5
+    })
+end)
+
 CreateThread(function()
     while true do
         sleep = 1000
@@ -306,27 +332,6 @@ CreateThread(function()
             local ped = PlayerPedId()
             local pos = GetEntityCoords(ped)
             if PlayerJob.name =="ambulance" then
-                for k, v in pairs(Config.Locations["duty"]) do
-                    local dist = #(pos - v)
-                    if dist < 5 then
-                        sleep = 0
-                        if dist < 1.5 then
-                            if onDuty then
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.offduty_button'))
-                            else
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.onduty_button'))
-                            end
-                            if IsControlJustReleased(0, 38) then
-                                onDuty = not onDuty
-                                TriggerServerEvent("QBCore:ToggleDuty")
-                                TriggerServerEvent("police:server:UpdateBlips")
-                            end
-                        elseif dist < 4.5 then
-                            DrawText3D(v.x, v.y, v.z, Lang:t('text.duty'))
-                        end
-                    end
-                end
-
                 for k, v in pairs(Config.Locations["armory"]) do
                     local dist = #(pos - v)
                     if dist < 4.5 then
