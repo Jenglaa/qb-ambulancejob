@@ -455,6 +455,54 @@ CreateThread(function()
                     end
                 end
             end
+
+            for k, v in pairs(Config.Locations["main-2"]) do
+                local dist = #(pos - v)
+                if dist < 1.5 then
+                    sleep = 5
+                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_roof'))
+                    if IsControlJustReleased(0, 38) then
+                        DoScreenFadeOut(500)
+                        while not IsScreenFadedOut() do
+                            Wait(10)
+                        end
+
+                        currentHospital = k
+
+                        local coords = Config.Locations["garage"][currentHospital]
+                        SetEntityCoords(ped, coords.x, coords.y, coords.z, 0, 0, 0, false)
+                        SetEntityHeading(ped, coords.w)
+
+                        Wait(100)
+
+                        DoScreenFadeIn(1000)
+                    end
+                end
+            end
+
+            for k, v in pairs(Config.Locations["garage"]) do
+                local dist = #(pos - vector3(v.x, v.y, v.z))
+                if dist < 1.5 then
+                    sleep = 5
+                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_main'))
+                    if IsControlJustReleased(0, 38) then
+                        DoScreenFadeOut(500)
+                        while not IsScreenFadedOut() do
+                            Wait(10)
+                        end
+
+                        currentHospital = k
+
+                        local coords = Config.Locations["main-2"][currentHospital]
+                        SetEntityCoords(ped, coords.x, coords.y, coords.z, 0, 0, 0, false)
+                        SetEntityHeading(ped, coords.w)
+
+                        Wait(100)
+
+                        DoScreenFadeIn(1000)
+                    end
+                end
+            end
         end
         Wait(sleep)
     end
