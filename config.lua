@@ -1,6 +1,6 @@
 Config = {}
 
-Config.MinimalDoctors = 1
+Config.MinimalDoctors = 2
 Config.WipeInventoryOnRespawn = false
 
 Config.Locations = {
@@ -139,7 +139,9 @@ Config.Items = {
     }
 }
 
-Config.BillCost = 2000
+Config.AIBillCost = 2000 -- Automatic revive
+Config.BillCost = 5000 -- Player revive
+Config.Percentage = 50 -- Player percent when reviving player
 Config.DeathTime = 300
 Config.CheckTime = 10
 
