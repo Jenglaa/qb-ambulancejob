@@ -19,9 +19,9 @@ RegisterNetEvent('hospital:server:SendToBed', function(bedId, isRevive)
 	local Player = QBCore.Functions.GetPlayer(src)
 	TriggerClientEvent('hospital:client:SendToBed', src, bedId, Config.Locations["beds"][bedId], isRevive)
 	TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
-	Player.Functions.RemoveMoney("bank", Config.BillCost , "respawned-at-hospital")
-	TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
-	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
+	Player.Functions.RemoveMoney("bank", Config.AIBillCost , "respawned-at-hospital")
+	TriggerEvent('qb-banking:society:server:DepositMoney', src, Config.AIBillCost , 'ambulance')
+	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.AIBillCost)
 end)
 RegisterNetEvent('hospital:server:SendToBedA', function(bedId, isRevive)
 	local src = source
@@ -41,9 +41,10 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 				MySQL.Async.execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 				TriggerClientEvent('QBCore:Notify', src, Lang:t('error.possessions_taken'), 'error')
 			end
-			Player.Functions.RemoveMoney("bank", Config.BillCost, "respawned-at-hospital")
-			TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
-			TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
+			if Player.Functions.RemoveMoney("cash", Config.AIBillCost, "respawned-at-hospital") or Player.Functions.RemoveMoney("bank", Config.AIBillCost, "respawned-at-hospital") then
+			TriggerEvent('qb-banking:society:server:DepositMoney', src, Config.AIBillCost , 'ambulance')
+			TriggerClientEvent('hospital:client:SendBillEmail', src, Config.AIBillCost)
+			end
 			return
 		end
 	end
@@ -56,9 +57,10 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 		MySQL.Async.execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 		TriggerClientEvent('QBCore:Notify', src, Lang:t('error.possessions_taken'), 'error')
 	end
-	Player.Functions.RemoveMoney("bank", Config.BillCost, "respawned-at-hospital")
-	TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
-	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
+	if Player.Functions.RemoveMoney("cash", Config.AIBillCost, "respawned-at-hospital") or Player.Functions.RemoveMoney("bank", Config.AIBillCost, "respawned-at-hospital") then
+	TriggerEvent('qb-banking:society:server:DepositMoney', src, Config.AIBillCost , 'ambulance')
+	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.AIBillCost)
+	end
 end)
 
 RegisterNetEvent('hospital:server:ambulanceAlert', function(text)
@@ -144,25 +146,24 @@ RegisterNetEvent('hospital:server:SetDoctor', function()
 	TriggerClientEvent("hospital:client:SetDoctorCount", -1, amount)
 end)
 
-RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
+RegisterNetEvent('hospital:server:RevivePlayer', function(playerId)
 	local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
 	local Patient = QBCore.Functions.GetPlayer(playerId)
-	local oldMan = isOldMan or false
-	if Patient then
-		if oldMan then
-			if Player.Functions.RemoveMoney("cash", 5000, "revived-player") then
-				Player.Functions.RemoveItem('firstaid', 1)
-				TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['firstaid'], "remove")
-				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
-			else
-				TriggerClientEvent('QBCore:Notify', src, Lang:t('error.not_enough_money'), "error")
-			end
-		else
-			Player.Functions.RemoveItem('firstaid', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['firstaid'], "remove")
-			TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
-		end
+	local receiveMoney = math.floor( Config.BillCost / 100 * Config.Percentage )
+	local societyMoney = math.floor( (100 - Config.Percentage)/100 * Config.BillCost)
+	if Patient.Functions.RemoveMoney("cash", Config.BillCost , "revived-player") or Patient.Functions.RemoveMoney("bank", Config.BillCost , "revived-player") then
+		-- Player
+		Player.Functions.RemoveItem('firstaid', 1)
+		Player.Functions.AddMoney("bank", receiveMoney)
+		TriggerEvent('qb-banking:society:server:DepositMoney', src, societyMoney , 'ambulance')					-- deposit money to ambulance society account 
+		TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['firstaid'], "remove")
+		TriggerClientEvent('QBCore:Notify', src,'Bayaran Diterima', "success")									-- notify doktor
+		-- Patient
+		TriggerClientEvent('hospital:client:SendBillEmail', Patient.PlayerData.source, Config.BillCost)			-- notify patient
+		TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
+	else
+		TriggerClientEvent('QBCore:Notify', src,'Arwah tak ada duit', "error")
 	end
 end)
 
@@ -342,16 +343,8 @@ end, 'admin')
 QBCore.Commands.Add('bed', 'Get On Bed', {}, false, function(source, closestBed)
     local Player = QBCore.Functions.GetPlayer(source)
     if Player ~= isInHospitalBed then
-		print('testing client')
 		TriggerClientEvent('hospital:client:closestbed', source, closestBed)
-		print(closestBed)
-        -- TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-		-- TriggerClientEvent('hospital:client:SendToBed', source, bedId, Config.Locations["beds"][bedId])
-		-- TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
-        else
-			print('fail utk cari bed')
-            -- QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
-        end
+    end
 end)
 
 -- Items

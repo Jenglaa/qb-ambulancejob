@@ -60,7 +60,7 @@ local Translations = {
     mail = {
         sender = 'Pillbox Hospital',
         subject = 'Hospital Costs',
-        message = 'Dear %{gender} %{lastname}, <br /><br />Hereby you received an email with the costs of the last hospital visit.<br />The final costs have become: <strong>$%{costs}</strong><br /><br />We wish you a quick recovery!'
+        message = 'Dear %{gender} %{firstname}, <br /><br />Hereby you received an email with the costs of the last hospital visit.<br />The final costs have become: <strong>$%{costs}</strong><br /><br />We wish you a quick recovery!'
     },
     states = {
         irritated = 'irritated',
