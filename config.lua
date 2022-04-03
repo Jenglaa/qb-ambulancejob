@@ -1,6 +1,8 @@
 Config = {}
 
-Config.MinimalDoctors = 1
+Config.UseTarget = GetConvar('UseTarget', false)
+
+Config.MinimalDoctors = 2
 Config.WipeInventoryOnRespawn = true
 
 Config.Locations = {
@@ -13,7 +15,7 @@ Config.Locations = {
         [2] = vector3(-254.88, 6324.5, 32.58),
     },
     ["vehicle"] = {
-        [1] = vector4(294.578, -574.761, 43.179, 35.792),
+        [1] = vector4(294.578, -574.761, 43.179, 35.79),
         [2] = vector4(-234.28, 6329.16, 32.15, 222.5),
     },
     ["helicopter"] = {
@@ -28,20 +30,20 @@ Config.Locations = {
         [1] = vector4(338.5, -583.85, 74.16, 245.5),
     },
     ["main"] = {
-        [1] = vector3(298.44, -599.7, 43.29),
+        [1] = vector3(298.74, -599.33, 43.29),
     },
     ["stash"] = {
         [1] = vector3(309.78, -596.6, 43.29),
     },
     ["beds"] = {
-        [1] = {coords = vector4(307.79, -581.79, 43, 333), taken = false, model = 1631638868},
-        [2] = {coords = vector4(311.0, -583, 43, 333), taken = false, model = 1631638868},
-        [3] = {coords = vector4(314.4, -584.33, 43, 333), taken = false, model = 1631638868},
-        [4] = {coords = vector4(317.52, -585.56, 43, 333), taken = false, model = 1631638868},
-        [5] = {coords = vector4(322.68, -587.19, 43, 333), taken = false, model = 1631638868},
-        [6] = {coords = vector4(309.25, -577.42, 43, 154), taken = false, model = -1631638868},
-        [7] = {coords = vector4(313.76, -579.02, 43, 154), taken = false, model = -1631638868},
-        [8] = {coords = vector4(319.31, -581.04, 43, 154), taken = false, model = -1631638868},
+        [1] = {coords = vector4(353.1, -584.6, 43.11, 152.08), taken = false, model = 1631638868},
+        [2] = {coords = vector4(356.79, -585.86, 43.11, 152.08), taken = false, model = 1631638868},
+        [3] = {coords = vector4(354.12, -593.12, 43.1, 336.32), taken = false, model = 2117668672},
+        [4] = {coords = vector4(350.79, -591.8, 43.1, 336.32), taken = false, model = 2117668672},
+        [5] = {coords = vector4(346.99, -590.48, 43.1, 336.32), taken = false, model = 2117668672},
+        [6] = {coords = vector4(360.32, -587.19, 43.02, 152.08), taken = false, model = -1091386327},
+        [7] = {coords = vector4(349.82, -583.33, 43.02, 152.08), taken = false, model = -1091386327},
+        [8] = {coords = vector4(326.98, -576.17, 43.02, 152.08), taken = false, model = -1091386327},
 	--- paleto
 	    [9] = {coords = vector4(-252.43, 6312.25, 32.34, 313.48), taken = false, model = 2117668672},
         [10] = {coords = vector4(-247.04, 6317.95, 32.34, 134.64), taken = false, model = 2117668672},
