@@ -570,6 +570,18 @@ RegisterNetEvent('hospital:client:Revive', function()
         isDead = false
         SetEntityInvincible(player, false)
         SetLaststand(false)
+        TriggerServerEvent("hospital:server:RestoreWeaponDamage")
+        SetEntityMaxHealth(player, 200)
+        SetEntityHealth(player, 125)
+        ClearPedBloodDamage(player)
+        SetPlayerSprint(PlayerId(), true)
+        ResetAll()
+        ResetPedMovementClipset(player, 0.0)
+        -- TriggerServerEvent('hud:server:RelieveStress', 100)
+        TriggerServerEvent("hospital:server:SetDeathStatus", false)
+        TriggerServerEvent("hospital:server:SetLaststandStatus", false)
+        emsNotified = false
+        QBCore.Functions.Notify(Lang:t('info.healthy'))
     end
 
     if isInHospitalBed then
@@ -577,20 +589,19 @@ RegisterNetEvent('hospital:client:Revive', function()
         TaskPlayAnim(player, inBedDict , inBedAnim, 8.0, 1.0, -1, 1, 0, 0, 0, 0 )
         SetEntityInvincible(player, true)
         canLeaveBed = true
+        TriggerServerEvent("hospital:server:RestoreWeaponDamage")
+        SetEntityMaxHealth(player, 200)
+        SetEntityHealth(player, 200)
+        ClearPedBloodDamage(player)
+        SetPlayerSprint(PlayerId(), true)
+        ResetAll()
+        ResetPedMovementClipset(player, 0.0)
+        TriggerServerEvent('hud:server:RelieveStress', 100)
+        TriggerServerEvent("hospital:server:SetDeathStatus", false)
+        TriggerServerEvent("hospital:server:SetLaststandStatus", false)
+        emsNotified = false
+        QBCore.Functions.Notify(Lang:t('info.healthy'))
     end
-
-    TriggerServerEvent("hospital:server:RestoreWeaponDamage")
-    SetEntityMaxHealth(player, 200)
-    SetEntityHealth(player, 200)
-    ClearPedBloodDamage(player)
-    SetPlayerSprint(PlayerId(), true)
-    ResetAll()
-    ResetPedMovementClipset(player, 0.0)
-    TriggerServerEvent('hud:server:RelieveStress', 100)
-    TriggerServerEvent("hospital:server:SetDeathStatus", false)
-    TriggerServerEvent("hospital:server:SetLaststandStatus", false)
-    emsNotified = false
-    QBCore.Functions.Notify(Lang:t('info.healthy'))
 end)
 
 RegisterNetEvent('hospital:client:SetPain', function()
@@ -651,6 +662,23 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     end)
 end)
 
+RegisterNetEvent('hospital:client:closestbed', function()
+    if LocalPlayer.state['isLoggedIn'] then
+        local pos = GetEntityCoords(PlayerPedId())
+        if closestBed and not isInHospitalBed then
+            if #(pos - vector3(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z)) < 2 then
+                if GetAvailableBed(closestBed) then
+                    TriggerServerEvent("hospital:server:SendToBedA", closestBed, false)
+                else
+                    QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+                end
+            else
+                QBCore.Functions.Notify('Jauh Sangat Dari Katil Hospital', "error")
+            end
+        end
+    end
+end)
+
 RegisterNetEvent('hospital:client:SetBed', function(id, isTaken)
     Config.Locations["beds"][id].taken = isTaken
 end)
@@ -664,7 +692,7 @@ RegisterNetEvent('hospital:client:RespawnAtHospital', function()
 end)
 
 RegisterNetEvent('hospital:client:SendBillEmail', function(amount)
-    SetTimeout(math.random(2500, 4000), function()
+    SetTimeout(math.random(3000, 3000), function()
         local gender = Lang:t('info.mr')
         if QBCore.Functions.GetPlayerData().charinfo.gender == 1 then
             gender = Lang:t('info.mrs')
@@ -673,7 +701,23 @@ RegisterNetEvent('hospital:client:SendBillEmail', function(amount)
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Lang:t('mail.sender'),
             subject = Lang:t('mail.subject'),
-            message = Lang:t('mail.message', {gender = gender, lastname = charinfo.lastname, costs = amount}),
+            message = Lang:t('mail.message', {gender = gender, firstname = charinfo.firstname, costs = amount}),
+            button = {}
+        })
+    end)
+end)
+
+RegisterNetEvent('hospital:client:SendReceiveMoneyEmail', function(amount)
+    SetTimeout(math.random(3000, 3000), function()
+        local gender = Lang:t('info.mr')
+        if QBCore.Functions.GetPlayerData().charinfo.gender == 1 then
+            gender = Lang:t('info.mrs')
+        end
+        local charinfo = QBCore.Functions.GetPlayerData().charinfo
+        TriggerServerEvent('qb-phone:server:sendNewMail', {
+            sender = Lang:t('maildoctor.sender'),
+            subject = Lang:t('maildoctor.subject'),
+            message = Lang:t('maildoctor.message', {gender = gender, firstname = charinfo.firstname, costs = amount}),
             button = {}
         })
     end)
