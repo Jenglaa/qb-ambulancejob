@@ -1,8 +1,7 @@
 Config = {}
 
-Config.UseTarget = GetConvar('UseTarget', false)
 
-Config.MinimalDoctors = 2
+
 Config.MinimalDoctors = 1
 Config.WipeInventoryOnRespawn = true
 
